@@ -32,3 +32,6 @@ clean:
 	rm -rf JupyterLab.icns
 	rm -rf JupyterLab.iconset
 	rm -rf JupyterLab.app
+
+install: JupyterLab.app
+	cp -r $< /Applications
