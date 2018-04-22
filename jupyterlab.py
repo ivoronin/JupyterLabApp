@@ -15,7 +15,7 @@ if __name__ == '__main__':
     nargs = len(argv)
     if nargs == 1:
         # Run as application
-        system('"{jupyter}" lab "--browser={script} %s"'.format(**paths))
+        system('"{jupyter}" lab "--browser={script} %s" "--notebook-dir={notebook}"'.format(**paths))
     elif nargs == 2:
         # Run as browser
         url = argv[1]
