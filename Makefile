@@ -3,9 +3,9 @@ all: JupyterLab.app
 
 JupyterLab.app: Info.plist JupyterLab.icns jupyterlab.py
 	install -d $@/Contents/Resources
-	install Info.plist $@/Contents
+	install -m 644 Info.plist $@/Contents
 	install -m 755 jupyterlab.py $@/Contents/JupyterLab
-	install JupyterLab.icns $@/Contents/Resources
+	install -m 644 JupyterLab.icns $@/Contents/Resources
 	
 
 Info.plist: app.json
