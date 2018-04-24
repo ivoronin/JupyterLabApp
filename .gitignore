@@ -1,5 +1,5 @@
 .DS_Store
-JupyterLab.icns
-JupyterLab.iconset
-Info.plist
-JupyterLab.app
+*.icns
+*.iconset
+*.plist
+*.app

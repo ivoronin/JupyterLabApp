@@ -1,20 +1,32 @@
+APP=JupyterLab
+EXECUTABLE=jupyterlab.py
+DESTDIR=/Applications
+
+PB=/usr/libexec/PlistBuddy
+
 .PHONY: all clean
-all: JupyterLab.app
+.SUFFIXES: .png .iconset .icns
+.PRECIOUS: $(APP).iconset # Workaround, make is unable to remove intermediate directories
 
-JupyterLab.app: Info.plist JupyterLab.icns jupyterlab.py
+all: $(APP).app
+
+$(APP).app: $(APP).plist $(APP).icns $(EXECUTBALE)
 	install -d $@/Contents/Resources
-	install -m 644 Info.plist $@/Contents
-	install -m 755 jupyterlab.py $@/Contents/JupyterLab
-	install -m 644 JupyterLab.icns $@/Contents/Resources
+	install -m 644 $(APP).plist $@/Contents/Info.plist
+	install -m 755 $(EXECUTABLE) $@/Contents/$(APP)
+	install -m 644 $(APP).icns $@/Contents/Resources
 	
+$(APP).plist:
+	$(PB) -c "add :CFBundleInfoDictionaryVersion string 6.0" $@
+	$(PB) -c "add :CFBundleIconFile string $(APP)" $@
+	$(PB) -c "add :CFBundleDisplayName string $(APP)" $@
+	$(PB) -c "add :CFBundleExecutable string $(APP)" $@
+	$(PB) -c "add :CFBundleIdentifier string $(APP)" $@
 
-Info.plist: app.json
-	plutil -convert xml1 -o $@ $<
-
-JupyterLab.icns: JupyterLab.iconset
+.iconset.icns:
 	iconutil -c icns -o $@ $<
 
-JupyterLab.iconset: 2000px-Tango_Jupiter.svg.png
+.png.iconset:
 	install -d $@
 	convert -background none -resize '!16x16' $< $@/icon_16x16.png
 	convert -background none -resize '!32x32' $< $@/icon_16x16@2x.png
@@ -28,10 +40,10 @@ JupyterLab.iconset: 2000px-Tango_Jupiter.svg.png
 	convert -background none -resize '!1024x1024' $< $@/icon_512x512@2x.png
 
 clean:
-	rm -rf Info.plist
-	rm -rf JupyterLab.icns
-	rm -rf JupyterLab.iconset
-	rm -rf JupyterLab.app
+	rm -rf $(APP).plist
+	rm -rf $(APP).icns
+	rm -rf $(APP).iconset
+	rm -rf $(APP).app
 
-install: JupyterLab.app
-	cp -r $< /Applications
+install: $(APP).app
+	cp -r $< $(DESTDIR)
